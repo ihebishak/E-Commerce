@@ -9,6 +9,7 @@ import { ProductListComponent } from './components/product-list/product-list.com
 import { CategoryMenuComponent } from './components/category-menu/category-menu.component';
 import { SearchComponent } from './components/search/search.component';
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -17,12 +18,14 @@ import { ProductDetailsComponent } from './components/product-details/product-de
     ProductListComponent,
     CategoryMenuComponent,
     SearchComponent,
-    ProductDetailsComponent
+    ProductDetailsComponent,
+    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    NgbModule
   ],
   providers: [ProductService],
   bootstrap: [AppComponent]

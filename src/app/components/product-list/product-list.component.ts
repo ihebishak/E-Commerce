@@ -9,9 +9,16 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit {
-  products:Product[];
-  currentCategoryId:number;
-  searchMode:boolean;
+  products:Product[]=[];
+  currentCategoryId:number=1;
+  previousCategoryId:number=1;
+  searchMode:boolean=false;
+
+  thePageNumber:number=1;
+  thePageSize:number=5;
+  theTotalElements:number=0;
+
+  previousKeyword:string=null; 
 
   constructor(private productService:ProductService,private route:ActivatedRoute) { }
 
@@ -36,11 +43,24 @@ export class ProductListComponent implements OnInit {
 
   handleSearchProducts(){
     const theKeyWord : string=this.route.snapshot.paramMap.get('keyword');
-    this.productService.searchProducts(theKeyWord).subscribe(
+
+    if(this.previousKeyword!=theKeyWord){
+      this.thePageNumber=1;
+    }
+    this.previousKeyword=theKeyWord;
+
+    console.log(`keyword=${theKeyWord}, thePageNumber=${this.thePageNumber}`);
+
+
+
+    this.productService.searchProductsPaginate(this.thePageNumber-1,this.thePageSize,theKeyWord).subscribe(
       data=>{
-        this.products=data;
+        this.products=data._embedded.products;
+        this.thePageNumber=data.page.number+1;
+        this.thePageSize=data.page.size;
+        this.theTotalElements=data.page.totalElements;
       }
-    );
+    ) 
 
   }
 
@@ -52,11 +72,32 @@ export class ProductListComponent implements OnInit {
   else{
     this.currentCategoryId=1;
   }
-    this.productService.getProductList(this.currentCategoryId).subscribe(
+
+
+  if(this.previousCategoryId !=this.currentCategoryId){
+    this.thePageNumber=1;
+  }
+
+  this.previousCategoryId=this.currentCategoryId;
+  console.log(`currentCategoryId=${this.currentCategoryId}, thePageNumber=${this.thePageNumber}`);
+
+    this.productService.getProductListPaginate(this.thePageNumber-1,
+                                              this.thePageSize,
+                                               this.currentCategoryId).subscribe(
       data=>{
-        this.products=data;
+        this.products=data._embedded.products;
+        this.thePageNumber=data.page.number+1;
+        this.thePageSize=data.page.size;
+        this.theTotalElements=data.page.totalElements;
       }
     )
+  }
+
+  updatePageSize(pageSize:number){
+    this.thePageSize=pageSize;
+    this.thePageNumber=1;
+    this.listProducts();
+
   }
 
 }
