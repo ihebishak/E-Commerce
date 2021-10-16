@@ -5,24 +5,21 @@ import { ProductService } from 'src/app/services/product.service';
 @Component({
   selector: 'app-category-menu',
   templateUrl: './category-menu.component.html',
-  styleUrls: ['./category-menu.component.css']
+  styleUrls: ['./category-menu.component.css'],
 })
 export class CategoryMenuComponent implements OnInit {
-  categories:Category[];
+  categories: Category[];
 
-  constructor(private productService : ProductService) { }
+  constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
     this.listCategories();
   }
 
-  listCategories(){
-    this.productService.getCategories().subscribe(
-     data=>{
-       console.log('Categories='+JSON.stringify(data));
-       this.categories=data;
-     } 
-    )
+  listCategories() {
+    this.productService.getCategories().subscribe((data) => {
+      console.log('Categories=' + JSON.stringify(data));
+      this.categories = data;
+    });
   }
-
 }

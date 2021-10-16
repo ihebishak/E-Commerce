@@ -24,7 +24,7 @@ export class ProductListComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private cartService:CartService,
+    private cartService: CartService,
     private route: ActivatedRoute
   ) {}
 
@@ -104,15 +104,11 @@ export class ProductListComponent implements OnInit {
     this.listProducts();
   }
 
-  addToCart(theProduct:Product){
+  addToCart(theProduct: Product) {
     console.log(`Adding to cart: ${theProduct.name} , ${theProduct.unitPrice}`);
 
     const theCartItem = new CartItem(theProduct);
 
     this.cartService.addToCart(theCartItem);
-
-    
-
-
   }
 }
